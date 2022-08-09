@@ -15,9 +15,11 @@ With this program you will be able to generate OpenSSL and OpenSSH keys (RSA, Ed
 
 * [Installation](#installation)
 * [How to use it](#how-to-use-it)
-  * [Generate an Ed25519 key pair](#generate-an-ed25519-key-pair)
-  * [Generate an RSA key pair](#generate-an-rsa-key-pair)
-  * [Change a key pair format](#change-a-key-pair-format)
+    * [Generate an Ed25519 key pair](#generate-an-ed25519-key-pair)
+    * [Generate an RSA key pair](#generate-an-rsa-key-pair)
+    * [Change a key pair format](#change-a-key-pair-format)
+    * [Show information about a key](#show-information-about-a-key)
+    * [Help](#help)
 * [Packaging](#packaging)
     * [Autopackage Portable](#autopackage-portable)
     * [Autopackage Wheel](#autopackage-wheel)
@@ -91,10 +93,20 @@ keysec gen priv --algo rsa --bits 4096 --format openssh | tee private.key | keys
 Either if we have an OpenSSL or an OpenSSH key pair, we can perform transformations between both formats by simply doing:
 
 ```commandline
-keysec conv --in keyfile
+keysec conv < keyfile
 ```
 
 The program will automatically detect the original format and perform the transformation to the other one.
+
+### Show information about a key
+
+Show some information about a private or public key by simply running:
+
+```commandline
+keysec info < keyfile
+```
+
+### Help
 
 There are also multiple help options `--help/-h` in the program. Don't forget to read them if you forget something:
 
@@ -104,6 +116,7 @@ keysec gen -h
 keysec gen priv -h
 keysec gen pub -h
 keysec conv -h
+keysec info -h
 ```
 
 ## Packaging
@@ -127,6 +140,7 @@ autopackage -s setup.py -p
 ### Autopackage Wheel
 
 To generate the program wheel, available at PyPi, first do the following:
+
 1. In the `setup.py` file remove the `package_data` variable and also remove it from the `SetupParser` call
 2. In the `setup.py` file change the `zip_safe` flag to `True`
 3. In the `__main__.py` file remove lines `11` and `12`, that import the files inside the `libs` folder.
@@ -136,7 +150,6 @@ Then run:
 ```commandline
 autopackage -s setup.py
 ```
-
 
 ### PyInstaller
 

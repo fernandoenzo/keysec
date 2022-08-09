@@ -7,10 +7,10 @@ from typing import Union
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
-from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, PublicFormat
+from cryptography.hazmat.primitives.serialization import PrivateFormat, PublicFormat
 
 from keysec.converter import convert
-from keysec.iokeys import load_and_process
+from keysec.iokeys import load_and_process, key_to_str
 
 
 def ed25519() -> str:
@@ -48,8 +48,5 @@ def gen_public(priv_key: Union[Ed25519PrivateKey, RSAPrivateKey], orig_format: P
     if not isinstance(orig_format, PrivateFormat):
         raise ValueError('The specified key is not private')
     dst_format = PublicFormat.OpenSSH if orig_format is PrivateFormat.OpenSSH else PublicFormat.SubjectPublicKeyInfo
-    encoding = Encoding.OpenSSH if dst_format is PublicFormat.OpenSSH else Encoding.PEM
     pub_key = priv_key.public_key()
-    pub_key = pub_key.public_bytes(encoding=encoding, format=dst_format)
-    pub_key += b'\n' if encoding is Encoding.OpenSSH else b''
-    return pub_key.decode('utf-8')
+    return key_to_str(key=pub_key, str_format=dst_format)

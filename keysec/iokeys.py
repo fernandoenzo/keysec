@@ -7,14 +7,24 @@ from typing import Union, Callable, Tuple
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey, RSAPublicKey
-from cryptography.hazmat.primitives.serialization import load_pem_private_key, load_pem_public_key, load_ssh_private_key, load_ssh_public_key, PrivateFormat, PublicFormat
+from cryptography.hazmat.primitives.serialization import Encoding, NoEncryption, load_pem_private_key, load_pem_public_key, load_ssh_private_key, load_ssh_public_key, PrivateFormat, PublicFormat
+
+
+def key_to_str(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], str_format: Union[PrivateFormat, PublicFormat]) -> str:
+    encoding = Encoding.OpenSSH if str_format is PublicFormat.OpenSSH else Encoding.PEM
+    if isinstance(str_format, PrivateFormat):
+        res = key.private_bytes(encoding=encoding, format=str_format, encryption_algorithm=NoEncryption())
+    else:
+        res = key.public_bytes(encoding=encoding, format=str_format)
+        res += b'\n' if not res.endswith(b'\n') else b''
+    return res.decode('utf-8')
 
 
 def read_key(priv_key: TextIOWrapper) -> str:
     return priv_key.read()
 
 
-def load_key(key: str) -> Tuple[Union[Ed25519PrivateKey, RSAPrivateKey], PrivateFormat]:
+def load_key(key: str) -> Tuple[Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], Union[PrivateFormat, PublicFormat]]:
     key: bytes = key.encode('utf-8')
     loaded_key = None
     funcs = ((load_pem_private_key, PrivateFormat.PKCS8),
@@ -32,10 +42,10 @@ def load_key(key: str) -> Tuple[Union[Ed25519PrivateKey, RSAPrivateKey], Private
     return loaded_key, load[1]
 
 
-def write_key(key: str, output: TextIOWrapper):
+def write_key(key: str, output: TextIOWrapper, close=True):
     output.write(key)
     output.flush()
-    if not output.name == '<stdout>':
+    if close and not output.name == '<stdout>':
         output.close()
 
 

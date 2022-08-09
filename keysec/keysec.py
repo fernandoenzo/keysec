@@ -4,6 +4,7 @@
 
 from keysec.converter import convert
 from keysec.generator import gen_private, gen_public
+from keysec.info import info
 from keysec.iokeys import full_process, generate_and_write
 from keysec.parser import ARGS, generate_parser, parser, parse_args
 
@@ -19,6 +20,8 @@ def main():
             generate_parser.print_help()
     elif ARGS.CONVERT:
         full_process(key=ARGS.IN, output=ARGS.OUT, func=convert)
+    elif ARGS.INFO:
+        full_process(key=ARGS.IN, output=ARGS.OUT, func=info)
     else:
         parser.print_help()
 

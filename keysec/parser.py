@@ -18,6 +18,7 @@ class ARGS:
     FORMAT = None
     GENERATE = None
     IN = None
+    INFO = None
     OUT = None
     PRIVATE = None
     PUBLIC = None
@@ -94,7 +95,14 @@ convert_parser.add_argument('--in', '-i', metavar='key', dest='infile', nargs='?
 convert_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', nargs='?', default=sys.stdout, type=FileType('w', encoding='utf-8'),
                             help='output the key to the specified file. If this argument is not specified then standard output is used')
 
-collections.deque((sort_argparse_help(p) for p in (parser, generate_parser, private_parser, public_parser, convert_parser)), maxlen=0)
+# See information about a key
+info_parser = subparsers.add_parser('info', help='show information about a key')
+info_parser.add_argument('--in', '-i', metavar='key', dest='infile', nargs='?', default=sys.stdin, type=FileType('r', encoding='utf-8'),
+                         help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin.')
+info_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', nargs='?', default=sys.stdout, type=FileType('w', encoding='utf-8'),
+                         help='output the information to the specified file. If this argument is not specified then standard output is used')
+
+collections.deque((sort_argparse_help(p) for p in (parser, generate_parser, private_parser, public_parser, convert_parser, info_parser)), maxlen=0)
 
 
 def parse_args():
@@ -106,6 +114,7 @@ def parse_args():
     ARGS.OUT = args.get('outfile')
     ARGS.CONVERT = True if args.get('opt') == 'conv' else None
     ARGS.GENERATE = True if args.get('opt') == 'gen' else None
+    ARGS.INFO = True if args.get('opt') == 'info' else None
     ARGS.PRIVATE = True if args.get('gen') == 'priv' else None
     ARGS.PUBLIC = True if args.get('gen') == 'pub' else None
     return args
