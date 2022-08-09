@@ -24,11 +24,11 @@ def rsa(bits: int) -> str:
 
 
 def ed25519_ssh() -> str:
-    return load_and_process(priv_key=ed25519(), func=convert)
+    return load_and_process(key=ed25519(), func=convert)
 
 
 def rsa_ssh(bits: int) -> str:
-    return load_and_process(priv_key=rsa(bits), func=convert)
+    return load_and_process(key=rsa(bits), func=convert)
 
 
 def gen_private(algorithm: str, dst_format: str, bits: int = None) -> str:
@@ -45,6 +45,8 @@ def gen_private(algorithm: str, dst_format: str, bits: int = None) -> str:
 
 
 def gen_public(priv_key: Union[Ed25519PrivateKey, RSAPrivateKey], orig_format: PrivateFormat) -> str:
+    if not isinstance(orig_format, PrivateFormat):
+        raise ValueError('The specified key is not private')
     dst_format = PublicFormat.OpenSSH if orig_format is PrivateFormat.OpenSSH else PublicFormat.SubjectPublicKeyInfo
     encoding = Encoding.OpenSSH if dst_format is PublicFormat.OpenSSH else Encoding.PEM
     pub_key = priv_key.public_key()

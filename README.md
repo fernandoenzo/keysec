@@ -19,7 +19,8 @@ With this program you will be able to generate OpenSSL and OpenSSH keys (RSA, Ed
   * [Generate an RSA key pair](#generate-an-rsa-key-pair)
   * [Change a key pair format](#change-a-key-pair-format)
 * [Packaging](#packaging)
-    * [Autopackage](#autopackage)
+    * [Autopackage Portable](#autopackage-portable)
+    * [Autopackage Wheel](#autopackage-wheel)
     * [PyInstaller](#pyinstaller)
 * [Contributing](#contributing)
 * [License](#license)
@@ -90,7 +91,7 @@ keysec gen priv --algo rsa --bits 4096 --format openssh | tee private.key | keys
 Either if we have an OpenSSL or an OpenSSH key pair, we can perform transformations between both formats by simply doing:
 
 ```commandline
-keysec conv --in private.key
+keysec conv --in keyfile
 ```
 
 The program will automatically detect the original format and perform the transformation to the other one.
@@ -100,6 +101,8 @@ There are also multiple help options `--help/-h` in the program. Don't forget to
 ```commandline
 keysec -h
 keysec gen -h
+keysec gen priv -h
+keysec gen pub -h
 keysec conv -h
 ```
 
@@ -107,7 +110,7 @@ keysec conv -h
 
 In this section we are going to explain how to replicate the packaging process.
 
-### Autopackage
+### Autopackage Portable
 
 To generate the program lightest portable version, which is available in this GitHub repository, install first `autopackage` with `pip`:
 
@@ -120,6 +123,20 @@ Then run the following commands:
 ```commandline
 autopackage -s setup.py -p
 ```
+
+### Autopackage Wheel
+
+To generate the program wheel, available at PyPi, first do the following:
+1. In the `setup.py` file remove the `package_data` variable and also remove it from the `SetupParser` call
+2. In the `setup.py` file change the `zip_safe` flag to `True`
+3. In the `__main__.py` file remove lines `11` and `12`, that import the files inside the `libs` folder.
+
+Then run:
+
+```commandline
+autopackage -s setup.py
+```
+
 
 ### PyInstaller
 
