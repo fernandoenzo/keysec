@@ -16,8 +16,9 @@ def key_to_str(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RS
         res = key.private_bytes(encoding=encoding, format=str_format, encryption_algorithm=NoEncryption())
     else:
         res = key.public_bytes(encoding=encoding, format=str_format)
-        res += b'\n' if not res.endswith(b'\n') else b''
-    return res.decode('utf-8')
+    res = res.decode('utf-8').strip()
+    res += '\n'
+    return res
 
 
 def read_key(priv_key: TextIOWrapper) -> str:

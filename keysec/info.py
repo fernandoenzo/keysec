@@ -18,9 +18,8 @@ def info(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPubli
     command = ['openssl', 'pkey', '-text', '--noout']
     command.append('-pubin') if isinstance(orig_format, PublicFormat) else None
     key = convert(key, orig_format) if orig_format in (PrivateFormat.OpenSSH, PublicFormat.OpenSSH) else key_to_str(key, orig_format)
-    tmp = TemporaryFile(mode='w+')
-    write_key(key=key, output=tmp, close=False)
-    tmp.seek(0)
-    res = subprocess.run(command, capture_output=True, text=True, check=True, stdin=tmp)
-    tmp.close()
+    with TemporaryFile(mode='w+', encoding='utf-8') as tmp:
+        write_key(key=key, output=tmp, close=False)
+        tmp.seek(0)
+        res = subprocess.run(command, capture_output=True, text=True, check=True, stdin=tmp)
     return res.stdout

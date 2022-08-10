@@ -90,17 +90,27 @@ keysec gen priv --algo rsa --bits 4096 --format openssh | tee private.key | keys
 
 ### Change a key pair format
 
-Either if we have an OpenSSL or an OpenSSH key pair, we can perform transformations between both formats by simply doing:
+Either if we have an OpenSSL or an OpenSSH key pair, we can perform transformations between both formats. Let's see three equivalent ways to do it:
 
 ```commandline
 keysec conv < keyfile
+```
+
+
+```commandline
+keysec conv -i keyfile
+```
+
+
+```commandline
+cat keyfile | keysec conv
 ```
 
 The program will automatically detect the original format and perform the transformation to the other one.
 
 ### Show information about a key
 
-Show some information about a private or public key by simply running:
+Show some information about a private or public key. Again, like the last command, there is more than one way to do this. The simplest one is:
 
 ```commandline
 keysec info < keyfile
