@@ -5,11 +5,21 @@
 import collections
 import sys
 from pathlib import Path
-
-from keysec.keysec import main
+from tempfile import TemporaryDirectory
+from zipfile import ZipFile
 
 LIBS_FOLDER = Path(__file__).parent.joinpath('keysec').joinpath('libs').resolve()
-collections.deque((sys.path.insert(0, str(lib)) for lib in LIBS_FOLDER.iterdir()), maxlen=0)
+
+tempdirs = []
+
+for lib in LIBS_FOLDER.iterdir():
+    tempdirs.append(temp_folder := TemporaryDirectory())
+    with ZipFile(file=lib, mode='r') as library:
+        library.extractall(temp_folder.name)
+
+collections.deque((sys.path.insert(0, temp_folder.name) for temp_folder in tempdirs), maxlen=0)
 
 if __name__ == '__main__':
+    from keysec.keysec import main
+
     main()
