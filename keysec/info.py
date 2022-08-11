@@ -14,7 +14,7 @@ from keysec.converter import convert
 from keysec.iokeys import key_to_str, write_key
 
 
-def info(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], orig_format: Union[PrivateFormat, PublicFormat]) -> str:
+def info(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], orig_format: Union[PrivateFormat, PublicFormat], comment: str) -> str:
     command = ['openssl', 'pkey', '-text', '--noout']
     command.append('-pubin') if isinstance(orig_format, PublicFormat) else None
     key = convert(key, orig_format) if orig_format in (PrivateFormat.OpenSSH, PublicFormat.OpenSSH) else key_to_str(key, orig_format)

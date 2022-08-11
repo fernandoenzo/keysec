@@ -18,6 +18,6 @@ _transform = {
 }
 
 
-def convert(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], orig_format: Union[PrivateFormat, PublicFormat]) -> str:
+def convert(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], orig_format: Union[PrivateFormat, PublicFormat], comment: str) -> str:
     dst_format = _transform[orig_format]
     return key_to_str(key=key, str_format=dst_format)

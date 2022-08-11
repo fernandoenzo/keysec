@@ -19,7 +19,7 @@ def gen_private(algorithm: Type[Union[Ed25519PrivateKey, RSAPrivateKey]], dst_fo
     return key_to_str(key=key, str_format=dst_format)
 
 
-def gen_public(priv_key: Union[Ed25519PrivateKey, RSAPrivateKey], orig_format: PrivateFormat) -> str:
+def gen_public(priv_key: Union[Ed25519PrivateKey, RSAPrivateKey], orig_format: PrivateFormat, comment: str) -> str:
     if not isinstance(orig_format, PrivateFormat):
         raise ArgumentError(argument=in_arg, message='specified key is not private')
     dst_format = PublicFormat.OpenSSH if orig_format is PrivateFormat.OpenSSH else PublicFormat.SubjectPublicKeyInfo
