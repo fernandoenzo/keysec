@@ -7,7 +7,7 @@ from setuptools import find_packages
 
 name = 'keysec'
 
-version = '1.1.1'
+version = '1.1.2'
 
 description = 'With this program you will be able to generate OpenSSL and OpenSSH keys (RSA, Ed25519) and carry out transformations between both formats.'
 
@@ -18,7 +18,7 @@ author = 'Fernando Enzo Guarini'
 author_email = 'fernandoenzo@gmail.com'
 
 url = 'https://github.com/fernandoenzo/keysec'
-download_url = 'https://github.com/fernandoenzo/keysec'
+download_url = 'https://github.com/fernandoenzo/keysec/releases'
 
 packages = find_packages()
 

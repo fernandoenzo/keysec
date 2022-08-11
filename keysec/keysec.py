@@ -2,11 +2,15 @@
 # encoding:utf-8
 
 
+import sys
+
 from keysec.converter import convert
 from keysec.generator import gen_private, gen_public
 from keysec.info import info
 from keysec.iokeys import full_process, generate_and_write
 from keysec.parser import ARGS, generate_parser, parser, parse_args
+
+sys.tracebacklimit = 0
 
 
 def main():

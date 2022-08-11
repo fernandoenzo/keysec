@@ -2,12 +2,15 @@
 # encoding:utf-8
 
 
+from argparse import ArgumentError
 from io import TextIOWrapper
-from typing import Union, Callable, Tuple
+from typing import Callable, Tuple, Union
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey, RSAPublicKey
-from cryptography.hazmat.primitives.serialization import Encoding, NoEncryption, load_pem_private_key, load_pem_public_key, load_ssh_private_key, load_ssh_public_key, PrivateFormat, PublicFormat
+from cryptography.hazmat.primitives.serialization import Encoding, load_pem_private_key, load_pem_public_key, load_ssh_private_key, load_ssh_public_key, NoEncryption, PrivateFormat, PublicFormat
+
+from keysec.parser import in_arg
 
 
 def key_to_str(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], str_format: Union[PrivateFormat, PublicFormat]) -> str:
@@ -39,7 +42,7 @@ def load_key(key: str) -> Tuple[Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPr
         except:
             pass
     if loaded_key is None:
-        raise ValueError('The specified key is not in OpenSSL PEM nor OpenSSH format')
+        raise ArgumentError(argument=in_arg, message='input is not an OpenSSL or OpenSSH ASCII-encoded key')
     return loaded_key, load[1]
 
 
@@ -57,25 +60,12 @@ def generate_and_write(output: TextIOWrapper,
     write_key(key=key, output=output)
 
 
-def load_and_process(key: str,
-                     func: Callable[[Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], Union[PrivateFormat, PublicFormat], ...], str],
-                     *args, **kwargs) -> str:
-    key = load_key(key=key)
-    key, orig_format = key[0], key[1]
-    return func(key, orig_format, *args, **kwargs)
-
-
-def load_process_and_write(key: str,
-                           output: TextIOWrapper,
-                           func: Callable[[Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], Union[PrivateFormat, PublicFormat], ...], str],
-                           *args, **kwargs):
-    key = load_and_process(key=key, func=func, *args, **kwargs)
-    write_key(key=key, output=output)
-
-
 def full_process(key: TextIOWrapper,
                  output: TextIOWrapper,
                  func: Callable[[Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], Union[PrivateFormat, PublicFormat], ...], str],
                  *args, **kwargs):
-    key: str = read_key(key)
-    load_process_and_write(key=key, output=output, func=func, *args, **kwargs)
+    key = read_key(key)
+    key = load_key(key=key)
+    key, orig_format = key[0], key[1]
+    key = func(key, orig_format, *args, **kwargs)
+    write_key(key=key, output=output)
