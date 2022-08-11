@@ -3,6 +3,7 @@
 
 
 from argparse import ArgumentError
+from getpass import getpass
 from io import TextIOWrapper
 from typing import Callable, Tuple, Union
 
@@ -39,6 +40,14 @@ def load_key(key: str) -> Tuple[Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPr
         try:
             loaded_key = load[0](key, password=None) if isinstance(load[1], PrivateFormat) else load[0](key)
             break
+        except ValueError as error:
+            if error.args[0] == 'Key is password-protected.':
+                passphrase = getpass('Enter current key passphrase: ')
+                try:
+                    loaded_key = load[0](key, password=passphrase.encode('utf-8'))
+                    break
+                except:
+                    raise ValueError('Entered passphrase is incorrect.') from None
         except:
             pass
     if loaded_key is None:
