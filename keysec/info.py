@@ -4,22 +4,19 @@
 
 import subprocess
 from tempfile import TemporaryFile
-from typing import Union
-
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey, RSAPublicKey
-from cryptography.hazmat.primitives.serialization import PrivateFormat, PublicFormat
 
 from keysec.converter import convert
-from keysec.iokeys import key_to_str, write_key
+from keysec.iokeys import Key, write_output
 
 
-def info(key: Union[Ed25519PrivateKey, Ed25519PublicKey, RSAPrivateKey, RSAPublicKey], orig_format: Union[PrivateFormat, PublicFormat], comment: str) -> str:
+def info(key: Key) -> str:
     command = ['openssl', 'pkey', '-text', '--noout']
-    command.append('-pubin') if isinstance(orig_format, PublicFormat) else None
-    key = convert(key, orig_format) if orig_format in (PrivateFormat.OpenSSH, PublicFormat.OpenSSH) else key_to_str(key, orig_format)
+    command.extend(('-passin', f'pass:{key.password}')) if key.password else None
+    command.append('-pubin') if key.is_public() else None
+    key_str = convert(key) if key.is_ssh() else key.to_str()
     with TemporaryFile(mode='w+', encoding='utf-8') as tmp:
-        write_key(key=key, output=tmp, close=False)
+        write_output(text=key_str, file=tmp, close=False)
         tmp.seek(0)
-        res = subprocess.run(command, capture_output=True, text=True, check=True, stdin=tmp)
-    return res.stdout
+        res = subprocess.run(command, capture_output=True, text=True, check=True, stdin=tmp).stdout.strip()
+    res += f'\nOpenSSH comment: {key.comment}' if key.get_ssh_comment() else ''
+    return res

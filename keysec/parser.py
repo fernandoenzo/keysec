@@ -116,7 +116,7 @@ def parse_args():
     ARGS.ALGORITHM = args.get('algorithm')
     ARGS.BITS = args.get('bits')
     ARGS.FORMAT = args.get('format')
-    ARGS.IN = args.get('infile').read()
+    ARGS.IN = args.get('infile').read() if args.get('infile') else None
     ARGS.OUT = args.get('outfile')
     ARGS.CONVERT = args.get('opt') == 'conv'
     ARGS.GENERATE = args.get('opt') == 'gen'
