@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 # encoding:utf-8
 
+import sys
+from pathlib import Path
+
 # More on how to configure this file here: https://setuptools.readthedocs.io/en/latest/setuptools.html#metadata
 from autopackage.parsers.setup_parser import SetupParser
 from setuptools import find_packages
 
+PROGRAM_FOLDER = Path(__file__).parent.joinpath('keysec').resolve()
+sys.path.insert(0, PROGRAM_FOLDER.name)
+
+from version import VERSION
+
 name = 'keysec'
 
-version = '1.1.2'
+version = VERSION
 
 description = 'With this program you will be able to generate OpenSSL and OpenSSH keys (RSA, Ed25519) and carry out transformations between both formats.'
 
