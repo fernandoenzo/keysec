@@ -7,7 +7,15 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/fernandoenzo/keysec)
 ![PyPI - License](https://img.shields.io/pypi/l/keysec)
 
-With this program you will be able to generate OpenSSL and OpenSSH keys (RSA, Ed25519) and carry out transformations between both formats.
+With this program you'll be able to:
+
+- Generate OpenSSL and OpenSSH private and public keys (Ed25519, RSA)
+- Convert a key pair between both formats (OpenSSL ↔ OpenSSH)
+- Add, edit and remove passphrases from private keys.
+- Add, edit and remove comments from OpenSSH keys.
+- See information about a key.
+
+You need to have `openssl` and `ssh-keygen` for this program to work.
 
 ## Table of contents
 
@@ -18,6 +26,8 @@ With this program you will be able to generate OpenSSL and OpenSSH keys (RSA, Ed
     * [Generate an Ed25519 key pair](#generate-an-ed25519-key-pair)
     * [Generate an RSA key pair](#generate-an-rsa-key-pair)
     * [Change a key pair format](#change-a-key-pair-format)
+    * [Edit a key passphrase](#edit-a-key-passphrase)
+    * [Edit a key comment](#edit-a-key-comment)
     * [Show information about a key](#show-information-about-a-key)
     * [Help](#help)
 * [Packaging](#packaging)
@@ -54,7 +64,9 @@ Similarly, it is capable of reading input data from a file (`--in/-i`) or from s
 
 This feature gives the program versatility to use linux pipes, as we will see now.
 
-### Generate an Ed25519 key pair
+### Generate a key pair
+
+#### Generate an Ed25519 key pair
 
 Let's start creating the private key. For this example we are creating it in OpenSSL format. To make it in OpenSSH format simply replace the corresponding `--format` argument:
 
@@ -79,34 +91,66 @@ Now let's do the same with a 4096-bit RSA key pair (by default the program uses 
 
 ```commandline
 keysec gen priv --algo rsa --bits 4096 --format openssh --out private.key
-keysec gen pub --in private.key --out public.key
+keysec gen pub -i private.key -o public.key
 ```
 
 In a single line, using pipes, this would be:
 
 ```commandline
-keysec gen priv --algo rsa --bits 4096 --format openssh | tee private.key | keysec gen pub --out public.key
+keysec gen priv -a rsa -b 4096 -f openssh | tee private.key | keysec gen pub -o public.key
 ```
 
 ### Change a key pair format
 
-Either if we have an OpenSSL or an OpenSSH key pair, we can perform transformations between both formats. Let's see three equivalent ways to do it:
+Either if we have an OpenSSL or an OpenSSH key pair, we can perform transformations between both formats.
+
+If the original key has a passphrase, it will be kept in the new formatted one unless `--nopass/-np` is specified.
+
+Let's see three ways to use this command:
 
 ```commandline
 keysec conv < keyfile
 ```
 
-
 ```commandline
-keysec conv -i keyfile
+keysec conv -i keyfile --nopass
 ```
 
-
 ```commandline
-cat keyfile | keysec conv
+cat keyfile | keysec conv -np
 ```
 
 The program will automatically detect the original format and perform the transformation to the other one.
+
+### Edit a key passphrase
+
+To interactively add, edit or remove a private key passphrase, use the `--password/-p` option:
+
+```commandline
+keysec edit -p -i private.key
+```
+
+### Edit a key comment
+
+If you want to add, edit, or delete an OpenSSH public or private key comment, you can choose to do so interactively or put it in the arguments, as shown in the next two examples.
+
+For interactive mode, simply use the option `--comment/-c`:
+
+```commandline
+keysec edit --comment --in keyfile
+```
+
+To directly write the comment to the key without being prompted for input, just do:
+
+```commandline
+keysec edit -c "root@host" -i keyfile
+```
+
+Use an empty string to remove a comment:
+
+```commandline
+keysec edit -c "" -i keyfile
+```
 
 ### Show information about a key
 
@@ -126,6 +170,7 @@ keysec gen -h
 keysec gen priv -h
 keysec gen pub -h
 keysec conv -h
+keysec edit -h
 keysec info -h
 ```
 
@@ -153,7 +198,7 @@ To generate the program wheel, available at PyPi, first do the following:
 
 1. In the `setup.py` file remove the `package_data` variable and also remove it from the `SetupParser` call
 2. In the `setup.py` file change the `zip_safe` flag to `True`
-3. In the `__main__.py` file remove lines `11` and `12`, that import the files inside the `libs` folder.
+3. In the `__main__.py` file remove lines from `5` to `20`, that import the files inside the `libs` folder.
 
 Then run:
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # encoding:utf-8
 
+
 import sys
 from pathlib import Path
 
@@ -39,7 +40,8 @@ keywords = 'openssl openssh key private public rsa ed25519 elliptic curve cyrpto
 python_requires = '>=3.9'
 
 install_requires = [
-    'cryptography >= 37.0.4',
+    'bcrypt == 3.2.2',
+    'cryptography == 37.0.4',
 ]
 
 classifiers = [
