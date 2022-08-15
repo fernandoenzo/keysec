@@ -49,8 +49,8 @@ def safe_input(prompt='') -> str:
         return res
 
 
-def edit(key: Key, comment=None, password=None) -> str:
-    if password is True and key.is_private():
+def edit(key: Key, comment=None, password=False) -> str:
+    if password and key.is_private():
         password = getpass('Enter new passphrase (empty for no passphrase): ')
         password_rep = getpass('Enter same passphrase again: ')
         if password != password_rep:
