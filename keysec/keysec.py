@@ -2,6 +2,7 @@
 # encoding:utf-8
 
 
+import os
 import sys
 
 from keysec.converter import convert
@@ -9,9 +10,11 @@ from keysec.edit import edit
 from keysec.generator import gen_private, gen_public
 from keysec.info import info
 from keysec.iokeys import full_process, generate_and_write
-from keysec.parser import ARGS, generate_parser, parser, parse_args
+from keysec.parsers import ARGS, generate_parser, parse_args, top_parser
 
 sys.tracebacklimit = 0
+
+os.umask(0o177)  # chmod 600
 
 
 def main():
@@ -30,7 +33,7 @@ def main():
     elif ARGS.INFO:
         full_process(key_str=ARGS.IN, output=ARGS.OUT, func=info)
     else:
-        parser.print_help()
+        top_parser.print_help()
 
 
 if __name__ == '__main__':

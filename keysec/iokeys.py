@@ -15,7 +15,7 @@ from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey, RSAPubl
 from cryptography.hazmat.primitives.serialization import BestAvailableEncryption, Encoding, load_pem_private_key, load_pem_public_key, load_ssh_private_key, load_ssh_public_key, NoEncryption, \
     PrivateFormat, PublicFormat
 
-from keysec.parser import in_arg
+from keysec.parsers import in_arg
 
 
 class Key:

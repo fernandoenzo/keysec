@@ -11,7 +11,7 @@ from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
 from cryptography.hazmat.primitives.serialization import PrivateFormat, PublicFormat
 
 from keysec.iokeys import Key
-from keysec.parser import in_arg
+from keysec.parsers import in_arg
 
 
 def gen_private(algorithm: Type[Union[Ed25519PrivateKey, RSAPrivateKey]], dst_format: PrivateFormat, bits: int = None) -> str:
