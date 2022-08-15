@@ -20,6 +20,7 @@ os.umask(0o177)  # chmod 600
 class ARGS:
     ALGORITHM = None
     BITS = None
+    COMMENT = None
     CONVERT = None
     FORMAT = None
     GENERATE = None
@@ -27,6 +28,7 @@ class ARGS:
     INFO = None
     NOPASS = None
     OUT = None
+    PASS = None
     PRIVATE = None
     PUBLIC = None
 
@@ -108,6 +110,17 @@ convert_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', n
 convert_parser.add_argument('--nopass', '-np', dest='nopass', action='store_true', default=False,
                             help="if this option is specified and the input key has a passphrase, the output key will not. Otherwise, the same passphrase will be kept for the output key")
 
+# Edit passphrases and comments
+edit_parser = subparsers.add_parser('edit', help='edit the passphrase and comment of a key', formatter_class=CustomArgumentFormatter)
+edit_parser.add_argument('--in', '-i', metavar='key', dest='infile', nargs='?', default=sys.stdin, type=FileType('r', encoding='utf-8'),
+                         help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin.')
+edit_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', nargs='?', default=sys.stdout, type=FileType('w', encoding='utf-8'),
+                         help='output the key to the specified file. If this argument is not specified then standard output is used')
+edit_parser.add_argument('--pass', '-p', action='store_true', help='interactively set/edit the key passphrase')
+edit_parser.add_argument('--comment', '-c', metavar='comment', nargs='?', const=True, default=None,
+                         help='set/edit the key comment (only OpenSSH format). If this option is specified but not followed by a comment, '
+                              'then an input is prompted to enter the comment interactively.')
+
 # See information about a key
 info_parser = subparsers.add_parser('info', help='show information about a key', formatter_class=CustomArgumentFormatter)
 info_parser.add_argument('--in', '-i', metavar='key', dest='infile', nargs='?', default=sys.stdin, type=FileType('r', encoding='utf-8'),
@@ -122,10 +135,12 @@ def parse_args():
     args = vars(parser.parse_args())
     ARGS.ALGORITHM = args.get('algorithm')
     ARGS.BITS = args.get('bits')
+    ARGS.COMMENT = args.get('comment')
     ARGS.FORMAT = args.get('format')
     ARGS.IN = args.get('infile').read() if args.get('infile') else None
     ARGS.NOPASS = args.get('nopass')
     ARGS.OUT = args.get('outfile')
+    ARGS.PASS = args.get('pass')
     ARGS.CONVERT = args.get('opt') == 'conv'
     ARGS.GENERATE = args.get('opt') == 'gen'
     ARGS.INFO = args.get('opt') == 'info'
