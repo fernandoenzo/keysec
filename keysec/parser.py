@@ -12,6 +12,8 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
 from cryptography.hazmat.primitives.serialization import PrivateFormat
 
+from keysec.version import version_msg
+
 os.umask(0o177)  # chmod 600
 
 
@@ -69,6 +71,8 @@ def sort_argparse_help(parser: ArgumentParser):
 
 parser = ArgumentParser(prog='keysec', description='With this program you will be able to generate OpenSSL and OpenSSH keys (RSA, Ed25519) and carry out '
                                                    'transformations between both formats.', formatter_class=CustomArgumentFormatter)
+
+parser.add_argument('--version', '-v', help='print version information and exit', action='version', version=version_msg)
 
 subparsers = parser.add_subparsers(dest='opt')
 
