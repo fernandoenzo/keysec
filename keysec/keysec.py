@@ -5,6 +5,7 @@
 import sys
 
 from keysec.converter import convert
+from keysec.edit import edit
 from keysec.generator import gen_private, gen_public
 from keysec.info import info
 from keysec.iokeys import full_process, generate_and_write
@@ -24,6 +25,8 @@ def main():
             generate_parser.print_help()
     elif ARGS.CONVERT:
         full_process(key_str=ARGS.IN, output=ARGS.OUT, func=convert, nopass=ARGS.NOPASS)
+    elif ARGS.EDIT:
+        full_process(key_str=ARGS.IN, output=ARGS.OUT, func=edit, comment=ARGS.COMMENT, password=ARGS.PASSWORD)
     elif ARGS.INFO:
         full_process(key_str=ARGS.IN, output=ARGS.OUT, func=info)
     else:
