@@ -2,6 +2,10 @@
 # encoding:utf-8
 
 
+# !/usr/bin/env python3
+# encoding:utf-8
+
+
 from argparse import ArgumentError
 from typing import Type, Union
 

@@ -5,10 +5,7 @@
 import os
 import sys
 
-from keysec.converter import convert
-from keysec.edit import edit
-from keysec.generator import gen_private, gen_public
-from keysec.info import info
+from keysec.actions import convert, edit, gen_private, gen_public, info
 from keysec.iokeys import full_process, generate_and_write
 from keysec.parsers import ARGS, generate_parser, parse_args, top_parser
 

@@ -5,7 +5,7 @@
 import sys
 from argparse import FileType
 
-from keysec.parsers.top_parser import subparsers
+from keysec.parsers.top import subparsers
 from keysec.parsers.utils import CustomArgumentFormatter, sort_argparse_help
 
 edit_parser = subparsers.add_parser('edit', help='edit the passphrase and comment of a key', formatter_class=CustomArgumentFormatter)

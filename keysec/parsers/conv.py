@@ -5,7 +5,7 @@
 import sys
 from argparse import FileType
 
-from keysec.parsers.top_parser import subparsers
+from keysec.parsers.top import subparsers
 from keysec.parsers.utils import CustomArgumentFormatter, sort_argparse_help
 
 convert_parser = subparsers.add_parser('conv', help='transform a key from one format to another (openssl ↔ openssh)', formatter_class=CustomArgumentFormatter)

@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
 from cryptography.hazmat.primitives.serialization import PrivateFormat
 
-from keysec.parsers.top_parser import subparsers
+from keysec.parsers.top import subparsers
 from keysec.parsers.utils import CustomArgumentFormatter, sort_argparse_help
 
 

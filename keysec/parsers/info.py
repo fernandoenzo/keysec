@@ -5,7 +5,7 @@
 import sys
 from argparse import FileType
 
-from keysec.parsers.top_parser import subparsers
+from keysec.parsers.top import subparsers
 from keysec.parsers.utils import CustomArgumentFormatter, sort_argparse_help
 
 info_parser = subparsers.add_parser('info', help='show information about a key', formatter_class=CustomArgumentFormatter)

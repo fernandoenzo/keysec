@@ -5,7 +5,7 @@
 import subprocess
 from tempfile import TemporaryFile
 
-from keysec.converter import convert
+from keysec.actions.conv import convert
 from keysec.iokeys import Key, write_output
 
 
