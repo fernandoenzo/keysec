@@ -97,14 +97,14 @@ private_parser.add_argument('--format', '-f', choices=['openssl', 'openssh'], de
 # Generate a public key
 public_parser = generate_subparser.add_parser('pub', help='given a private key, generate its associated public key with the same format', formatter_class=CustomArgumentFormatter)
 public_parser.add_argument('--in', '-i', metavar='private-key', dest='infile', nargs='?', default=sys.stdin, type=FileType('r', encoding='utf-8'),
-                           help='path to an existing PEM encoded private key. If not specified, it will be read from stdin.')
+                           help='path to an existing PEM encoded private key. If not specified, it will be read from stdin')
 public_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', nargs='?', default=sys.stdout, type=FileType('w', encoding='utf-8'),
                            help='output the key to the specified file. If this argument is not specified then standard output is used')
 
 # Convert between key formats
 convert_parser = subparsers.add_parser('conv', help='transform a key from one format to another (openssl ↔ openssh)', formatter_class=CustomArgumentFormatter)
 in_arg = convert_parser.add_argument('--in', '-i', metavar='key', dest='infile', nargs='?', default=sys.stdin, type=FileType('r', encoding='utf-8'),
-                                     help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin.')
+                                     help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin')
 convert_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', nargs='?', default=sys.stdout, type=FileType('w', encoding='utf-8'),
                             help='output the key to the specified file. If this argument is not specified then standard output is used')
 convert_parser.add_argument('--nopass', '-np', dest='nopass', action='store_true', default=False,
@@ -113,18 +113,18 @@ convert_parser.add_argument('--nopass', '-np', dest='nopass', action='store_true
 # Edit passphrases and comments
 edit_parser = subparsers.add_parser('edit', help='edit the passphrase and comment of a key', formatter_class=CustomArgumentFormatter)
 edit_parser.add_argument('--in', '-i', metavar='key', dest='infile', nargs='?', default=sys.stdin, type=FileType('r', encoding='utf-8'),
-                         help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin.')
+                         help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin')
 edit_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', nargs='?', default=sys.stdout, type=FileType('w', encoding='utf-8'),
                          help='output the key to the specified file. If this argument is not specified then standard output is used')
 edit_parser.add_argument('--pass', '-p', action='store_true', help='interactively set/edit the key passphrase')
 edit_parser.add_argument('--comment', '-c', metavar='comment', nargs='?', const=True, default=None,
                          help='set/edit the key comment (only OpenSSH format). If this option is specified but not followed by a comment, '
-                              'then an input is prompted to enter the comment interactively.')
+                              'then an input is prompted to enter the comment interactively')
 
 # See information about a key
 info_parser = subparsers.add_parser('info', help='show information about a key', formatter_class=CustomArgumentFormatter)
 info_parser.add_argument('--in', '-i', metavar='key', dest='infile', nargs='?', default=sys.stdin, type=FileType('r', encoding='utf-8'),
-                         help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin.')
+                         help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin')
 info_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', nargs='?', default=sys.stdout, type=FileType('w', encoding='utf-8'),
                          help='output the information to the specified file. If this argument is not specified then standard output is used')
 

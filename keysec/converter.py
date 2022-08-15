@@ -14,6 +14,6 @@ _transform = {
 }
 
 
-def convert(key: Key) -> str:
+def convert(key: Key, nopass=False) -> str:
     dst_format = _transform[key.orig_format]
-    return key.to_str(str_format=dst_format)
+    return key.to_str(str_format=dst_format, password='') if nopass else key.to_str(str_format=dst_format)

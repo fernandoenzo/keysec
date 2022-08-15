@@ -23,7 +23,7 @@ def main():
         else:
             generate_parser.print_help()
     elif ARGS.CONVERT:
-        full_process(key_str=ARGS.IN, output=ARGS.OUT, func=convert)
+        full_process(key_str=ARGS.IN, output=ARGS.OUT, func=convert, nopass=ARGS.NOPASS)
     elif ARGS.INFO:
         full_process(key_str=ARGS.IN, output=ARGS.OUT, func=info)
     else:

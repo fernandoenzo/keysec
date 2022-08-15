@@ -76,14 +76,16 @@ class Key:
         self.comment = ' '.join(info.split(' ')[2:-1])
         return self.comment
 
-    def to_str(self, str_format: Union[PrivateFormat, PublicFormat] = None, comment: str = None) -> str:
+    def to_str(self, str_format: Union[PrivateFormat, PublicFormat] = None, comment: str = None, password: str = None) -> str:
         str_format = str_format if str_format is not None else self.orig_format
+        password = password if password is not None else self.password
         encoding = Encoding.OpenSSH if str_format is PublicFormat.OpenSSH else Encoding.PEM
+
         if isinstance(str_format, PrivateFormat):
             if self.is_public():
                 raise ValueError('cannot convert a public key into a private one')
-            if self.password:
-                res = self.key.private_bytes(encoding=encoding, format=str_format, encryption_algorithm=BestAvailableEncryption(self.password.encode('utf-8')))
+            if password:
+                res = self.key.private_bytes(encoding=encoding, format=str_format, encryption_algorithm=BestAvailableEncryption(password.encode('utf-8')))
             else:
                 res = self.key.private_bytes(encoding=encoding, format=str_format, encryption_algorithm=NoEncryption())
         else:
@@ -100,7 +102,7 @@ class Key:
         elif comment and (str_format is PrivateFormat.OpenSSH):
             with NamedTemporaryFile(mode='w+', encoding='utf-8') as tmp:
                 write_output(res, tmp, close=False)
-                subprocess.run(['ssh-keygen', '-c', '-C', comment, '-P', self.password, '-f', tmp.name], capture_output=True, text=True, check=True)
+                subprocess.run(['ssh-keygen', '-c', '-C', comment, '-P', password, '-f', tmp.name], capture_output=True, text=True, check=True)
                 tmp.seek(0)
                 res = tmp.read().strip()
         return res
