@@ -25,6 +25,7 @@ class ARGS:
     GENERATE = None
     IN = None
     INFO = None
+    NOPASS = None
     OUT = None
     PRIVATE = None
     PUBLIC = None
@@ -104,6 +105,8 @@ in_arg = convert_parser.add_argument('--in', '-i', metavar='key', dest='infile',
                                      help='path to an existing PEM encoded public or private key. If not specified, it will be read from stdin.')
 convert_parser.add_argument('--out', '-o', metavar='filename', dest='outfile', nargs='?', default=sys.stdout, type=FileType('w', encoding='utf-8'),
                             help='output the key to the specified file. If this argument is not specified then standard output is used')
+convert_parser.add_argument('--nopass', '-np', dest='nopass', action='store_true', default=False,
+                            help="if this option is specified and the input key has a passphrase, the output key will not. Otherwise, the same passphrase will be kept for the output key")
 
 # See information about a key
 info_parser = subparsers.add_parser('info', help='show information about a key', formatter_class=CustomArgumentFormatter)
@@ -121,6 +124,7 @@ def parse_args():
     ARGS.BITS = args.get('bits')
     ARGS.FORMAT = args.get('format')
     ARGS.IN = args.get('infile').read() if args.get('infile') else None
+    ARGS.NOPASS = args.get('nopass')
     ARGS.OUT = args.get('outfile')
     ARGS.CONVERT = args.get('opt') == 'conv'
     ARGS.GENERATE = args.get('opt') == 'gen'
