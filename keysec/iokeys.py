@@ -25,6 +25,7 @@ class Key:
         self.orig_format: Union[PrivateFormat, PublicFormat] = None
         self.password: str = ''
         self.comment: str = None
+        self.fingerprint: str = None
 
     def is_ssh(self) -> bool:
         return self.orig_format is PrivateFormat.OpenSSH or self.orig_format is PublicFormat.OpenSSH
@@ -74,7 +75,12 @@ class Key:
             tmp.seek(0)
             info = subprocess.run(['ssh-keygen', '-l', '-f', '-'], capture_output=True, text=True, check=True, stdin=tmp).stdout
         self.comment = ' '.join(info.split(' ')[2:-1])
+        self.fingerprint = info.split(' ')[1]
         return self.comment
+
+    def get_ssh_fingerprint(self) -> str:
+        self.get_ssh_comment()
+        return self.fingerprint
 
     def to_str(self, str_format: Union[PrivateFormat, PublicFormat] = None, comment: str = None, password: str = None) -> str:
         str_format = str_format if str_format is not None else self.orig_format

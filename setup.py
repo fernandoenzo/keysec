@@ -35,13 +35,13 @@ licencia = 'GPLv3+'
 
 zip_safe = False
 
-keywords = 'openssl openssh key private public rsa ed25519 elliptic curve cyrptography convert transform keys format pem pkcs'
+keywords = 'openssl ssl openssh ssh key private public rsa ed25519 elliptic curve cyrptography convert transform keys format pem pkcs'
 
 python_requires = '>=3.9'
 
 install_requires = [
-    'bcrypt == 3.2.2',
-    'cryptography == 37.0.4',
+    'bcrypt == 4.0.1',
+    'cryptography == 40.0.1',
 ]
 
 classifiers = [
@@ -53,6 +53,7 @@ classifiers = [
     'Operating System :: POSIX :: Linux',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
     'Topic :: Security',
     'Topic :: Security :: Cryptography',
     'Topic :: Communications',

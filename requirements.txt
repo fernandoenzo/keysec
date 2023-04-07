@@ -1,2 +1,2 @@
-bcrypt==3.2.2
-cryptography==37.0.4
+bcrypt==4.0.1
+cryptography==40.0.1

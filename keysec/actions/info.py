@@ -17,5 +17,6 @@ def info(key: Key) -> str:
         write_output(text=key_str, file=tmp, close=False)
         tmp.seek(0)
         res = subprocess.run(command, capture_output=True, text=True, check=True, stdin=tmp).stdout.strip()
+    res += f'\nFingerprint: {key.fingerprint}' if key.get_ssh_fingerprint() else ''
     res += f'\nOpenSSH comment: {key.comment}' if key.get_ssh_comment() else ''
     return res

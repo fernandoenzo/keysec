@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # encoding:utf-8
 
-VERSION = '1.3.0'
+VERSION = '1.4.0'
 DATE = '2022 Aug 16'
 
 version_msg = f'''KeySec {VERSION} ({DATE})
